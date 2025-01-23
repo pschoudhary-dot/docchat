@@ -23,6 +23,13 @@ const Index = () => {
     setSelectedDocument(doc);
   };
 
+  const handleDocumentDelete = (docToDelete: any) => {
+    setDocuments(prev => prev.filter(doc => doc !== docToDelete));
+    if (selectedDocument === docToDelete) {
+      setSelectedDocument(null);
+    }
+  };
+
   const handleProceed = () => {
     if (documents.length === 0) {
       toast.error('Please upload at least one document');
@@ -46,6 +53,7 @@ const Index = () => {
                 <DocumentList 
                   documents={documents} 
                   onDocumentSelect={handleDocumentSelect}
+                  onDocumentDelete={handleDocumentDelete}
                 />
                 <div className="flex justify-center">
                   <Button 
@@ -71,6 +79,7 @@ const Index = () => {
               <DocumentList 
                 documents={documents} 
                 onDocumentSelect={handleDocumentSelect}
+                onDocumentDelete={handleDocumentDelete}
               />
             </div>
           </div>
