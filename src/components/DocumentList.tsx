@@ -1,5 +1,5 @@
 import React from 'react';
-import { File, FileText, Image, Video, Music, FileSpreadsheet, FilePresentation } from 'lucide-react';
+import { File, FileText, Image, Video, Music, FileSpreadsheet, FileType } from 'lucide-react';
 
 interface Document {
   name: string;
@@ -18,7 +18,7 @@ const DocumentList: React.FC<DocumentListProps> = ({ documents }) => {
     if (type.startsWith('video/')) return <Video className="w-6 h-6" />;
     if (type.startsWith('audio/')) return <Music className="w-6 h-6" />;
     if (type.includes('spreadsheet') || type.includes('csv')) return <FileSpreadsheet className="w-6 h-6" />;
-    if (type.includes('presentation')) return <FilePresentation className="w-6 h-6" />;
+    if (type.includes('presentation')) return <FileType className="w-6 h-6" />;
     if (type.includes('pdf') || type.includes('word')) return <FileText className="w-6 h-6" />;
     return <File className="w-6 h-6" />;
   };
