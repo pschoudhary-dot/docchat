@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -34,20 +35,25 @@ const Chat: React.FC<ChatProps> = ({ documents }) => {
     setLoading(true);
 
     try {
-      // Here you would typically make an API call to your LLM endpoint
+      // Here we would make the API call to Gemini or your preferred LLM
       // This is a placeholder response
+      const context = documents.map(doc => `${doc.name}: ${doc.content || doc.url}`).join('\n');
+      
+      // Simulated API call - Replace this with actual Gemini API integration
       setTimeout(() => {
         setMessages(prev => [
           ...prev,
           {
             role: 'assistant',
-            content: "I'm analyzing your documents and will provide a response based on the context. This is a placeholder response.",
+            content: `I'm analyzing your documents and will provide a response based on the context. This is a placeholder response. To integrate with Gemini AI or another LLM, you'll need to implement the API call here.`,
           },
         ]);
         setLoading(false);
       }, 1000);
+      
     } catch (error) {
       console.error('Error:', error);
+      toast.error('Error processing your request. Please try again.');
       setLoading(false);
     }
   };
