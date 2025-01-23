@@ -1,18 +1,21 @@
 import React from 'react';
 import { File, FileText, Image, Video, Music, FileSpreadsheet, FileType } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface Document {
   name: string;
   type: string;
   size: number;
   url: string;
+  content?: string;
 }
 
 interface DocumentListProps {
   documents: Document[];
+  onDocumentSelect?: (doc: Document) => void;
 }
 
-const DocumentList: React.FC<DocumentListProps> = ({ documents }) => {
+const DocumentList: React.FC<DocumentListProps> = ({ documents, onDocumentSelect }) => {
   const getIcon = (type: string) => {
     if (type.startsWith('image/')) return <Image className="w-6 h-6" />;
     if (type.startsWith('video/')) return <Video className="w-6 h-6" />;
@@ -39,7 +42,11 @@ const DocumentList: React.FC<DocumentListProps> = ({ documents }) => {
           {documents.map((doc, index) => (
             <div
               key={index}
-              className="flex items-center p-3 hover:bg-gray-50 rounded-lg transition-colors"
+              onClick={() => onDocumentSelect?.(doc)}
+              className={cn(
+                "flex items-center p-3 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer",
+                "hover:border-rag-primary/50 border border-transparent"
+              )}
             >
               <div className="text-gray-500 mr-3">
                 {getIcon(doc.type)}
