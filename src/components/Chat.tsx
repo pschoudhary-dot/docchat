@@ -9,6 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogDescription,
 } from "@/components/ui/dialog";
 
 interface Message {
@@ -75,6 +76,52 @@ const Chat: React.FC<ChatProps> = ({ documents, onUploadComplete, selectedDocume
     toast.success('Documents added successfully!');
   };
 
+  const renderDocumentPreview = () => {
+    if (!selectedDocument) return null;
+
+    if (selectedDocument.type.startsWith('image/')) {
+      return (
+        <img 
+          src={selectedDocument.url} 
+          alt={selectedDocument.name}
+          className="max-h-64 w-auto mx-auto rounded-lg object-contain"
+        />
+      );
+    }
+
+    if (selectedDocument.type.startsWith('video/')) {
+      return (
+        <video 
+          controls 
+          className="max-h-64 w-auto mx-auto rounded-lg"
+        >
+          <source src={selectedDocument.url} type={selectedDocument.type} />
+          Your browser does not support the video tag.
+        </video>
+      );
+    }
+
+    if (selectedDocument.type.startsWith('audio/')) {
+      return (
+        <audio 
+          controls 
+          className="w-full"
+        >
+          <source src={selectedDocument.url} type={selectedDocument.type} />
+          Your browser does not support the audio tag.
+        </audio>
+      );
+    }
+
+    // For PDFs, documents, and other file types
+    return (
+      <div className="text-center p-4 bg-gray-50 rounded-lg">
+        <p className="font-medium">{selectedDocument.name}</p>
+        <p className="text-sm text-gray-500">Click to open</p>
+      </div>
+    );
+  };
+
   return (
     <div className="flex flex-col h-full bg-white rounded-lg shadow-sm">
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
@@ -107,13 +154,14 @@ const Chat: React.FC<ChatProps> = ({ documents, onUploadComplete, selectedDocume
         <div ref={messagesEndRef} />
       </div>
 
-      {selectedDocument && selectedDocument.type.startsWith('image/') && (
+      {selectedDocument && (
         <div className="p-4 border-t">
-          <img 
-            src={selectedDocument.url} 
-            alt={selectedDocument.name}
-            className="max-h-64 mx-auto rounded-lg"
-          />
+          <div 
+            className="cursor-pointer hover:opacity-90 transition-opacity"
+            onClick={() => window.open(selectedDocument.url, '_blank')}
+          >
+            {renderDocumentPreview()}
+          </div>
         </div>
       )}
 
@@ -129,6 +177,9 @@ const Chat: React.FC<ChatProps> = ({ documents, onUploadComplete, selectedDocume
             <DialogContent className="max-w-3xl">
               <DialogHeader>
                 <DialogTitle>Add New Document</DialogTitle>
+                <DialogDescription>
+                  Upload additional documents or paste URLs to enhance the context.
+                </DialogDescription>
               </DialogHeader>
               <FileUpload onUploadComplete={handleUploadComplete} />
             </DialogContent>
